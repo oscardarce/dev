@@ -25,6 +25,7 @@ export function Contact() {
         name: String(data.get('name')),
         email: String(data.get('email')),
         message: String(data.get('message')),
+        botcheck: data.has('botcheck'),
       })
       form.reset()
       setStatus('success')
@@ -41,6 +42,8 @@ export function Contact() {
 
       <GlassCard className="p-6 sm:p-8 lg:col-span-3">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5" aria-describedby="contact-status">
+          {/* Honeypot antispam de Web3Forms: invisible y fuera del orden de tabulación. */}
+          <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="block">
               <span className={labelClass}>Name</span>

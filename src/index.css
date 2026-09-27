@@ -83,6 +83,17 @@
       animation-name: section-enter-fade, section-exit-fade;
       animation-timeline: --section, --section;
     }
+    /* La última sección no tiene salida: al bajar al footer el contenido de Contact no debe moverse. */
+    main > section:last-of-type .section-fade,
+    :root[data-scroll-dir='up'] main > section:last-of-type .section-fade {
+      animation-name: section-enter-edges, none;
+    }
+    :root[data-scroll-dir='up'] main > section:last-of-type .section-fade {
+      animation-name: section-enter-back, none;
+    }
+    main > section:last-of-type .fade-item {
+      animation-name: section-enter-fade, none;
+    }
   }
 }
 
@@ -138,6 +149,8 @@
   }
 }
 
+/* Solo opacidad (animable en el compositor). No añadir visibility: saca la animación del compositor y,
+   al terminar un salto, el transform compuesto puede quedar desincronizado y mostrar un "fantasma". */
 @keyframes section-enter-fade {
   entry 0%,
   entry 55% {
