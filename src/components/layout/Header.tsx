@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { profile, sections, type SectionId } from '../../data/profile'
+import { sections, type SectionId } from '../../data/profile'
 import { Button } from '../ui/Button'
 import { CloseIcon, MenuIcon } from '../ui/Icons'
 import { Navigation } from './Navigation'
@@ -52,29 +52,21 @@ export function Header() {
   const closeMenu = () => setMenuOpen(false)
 
   return (
-    <header className="glass fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-ink/60 backdrop-blur-md">
-      <div className="mx-auto box-content flex h-18 max-w-6xl items-center justify-between gap-6 px-5 sm:px-8">
-        <a href="#home" className="flex items-center gap-3 whitespace-nowrap" onClick={closeMenu}>
-          <span className="grid size-10 place-items-center rounded-xl border border-white/10 bg-white/5 font-display text-sm font-bold text-mint">
-            OD
-          </span>
-          <span className="flex flex-col leading-tight">
-            <span className="font-semibold text-white">{profile.name}</span>
-            <span className="text-xs text-white/60">Software Developer</span>
-          </span>
-        </a>
-
-        <nav aria-label="Primary" className="hidden lg:block">
-          <Navigation active={active} orientation="horizontal" />
-        </nav>
-
-        <div className="hidden lg:block">
-          <Button href="#contact">Let&rsquo;s connect</Button>
+    // Barra flotante sin marca: solo navegación y CTA. En móvil, solo el botón de menú.
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-5 pt-4 sm:px-8">
+      <div className="mx-auto flex max-w-6xl justify-end lg:justify-center">
+        <div className="glass pointer-events-auto hidden items-center gap-2 rounded-full border border-white/10 bg-ink/60 p-1.5 shadow-glass backdrop-blur-md lg:flex">
+          <nav aria-label="Primary">
+            <Navigation active={active} orientation="horizontal" />
+          </nav>
+          <Button href="#contact" className="py-2">
+            Let&rsquo;s connect
+          </Button>
         </div>
 
         <button
           type="button"
-          className="grid size-11 place-items-center rounded-full border border-white/10 bg-white/5 text-xl text-white lg:hidden"
+          className="glass pointer-events-auto grid size-12 place-items-center rounded-full border border-white/10 bg-ink/60 text-xl text-white shadow-glass backdrop-blur-md lg:hidden"
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -89,10 +81,10 @@ export function Header() {
         id="mobile-menu"
         aria-label="Primary"
         hidden={!menuOpen}
-        className="border-t border-white/10 bg-ink/95 px-5 pt-3 pb-6 sm:px-8 lg:hidden"
+        className="pointer-events-auto mx-auto mt-3 max-w-6xl rounded-card border border-white/10 bg-ink/95 p-3 shadow-glass lg:hidden"
       >
         <Navigation active={active} orientation="vertical" onNavigate={closeMenu} />
-        <Button href="#contact" className="mt-4 w-full" onClick={closeMenu}>
+        <Button href="#contact" className="mt-3 w-full" onClick={closeMenu}>
           Let&rsquo;s connect
         </Button>
       </nav>

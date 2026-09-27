@@ -12,7 +12,7 @@ export function About() {
         </div>
       </GlassCard>
 
-      <dl className="grid gap-4 sm:grid-cols-3 lg:col-span-2 lg:grid-cols-1">
+      <dl className="fade-item grid gap-4 sm:grid-cols-3 lg:col-span-2 lg:grid-cols-1">
         {profile.facts.map(({ value, label }) => (
           <div key={label} className="rounded-card border border-white/10 bg-ink/70 p-6">
             <dt className="sr-only">{label}</dt>

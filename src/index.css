@@ -1,11 +1,13 @@
 @import 'tailwindcss';
 
-/* Tokens: paleta del fondo (_referencias/fondo.jpg), lenguaje visual de Stitch. */
+/* Tokens: paleta "Luminous Void" (primary cyan, secondary índigo, tertiary violeta, neutral),
+   lenguaje visual de Stitch. Tertiary solo en trazos decorativos; danger del icono de borrar. */
 @theme {
-  --color-ink: #000000;
-  --color-mint: #b6d1c7;
-  --color-rose: #a36a76;
-  --color-periwinkle: #717698;
+  --color-ink: #0a0d14;
+  --color-primary: #00f0ff;
+  --color-secondary: #6366f1;
+  --color-tertiary: #a855f7;
+  --color-danger: #fca5a5;
 
   --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
@@ -34,19 +36,93 @@
   }
 
   :focus-visible {
-    @apply rounded-md outline-2 outline-offset-4 outline-mint;
+    @apply rounded-md outline-2 outline-offset-4 outline-primary;
   }
 }
 
-/* Retícula de puntos del fondo: un gradiente repetido, sin imagen. */
-.dot-grid {
-  background-image: radial-gradient(rgb(255 255 255 / 0.08) 1px, transparent 1px);
-  background-size: 28px 28px;
+/* Fondo: luces suaves de primary y secondary + retícula de puntos. Solo gradientes, sin imágenes ni blur. */
+.backdrop-lights {
+  background-image:
+    radial-gradient(40rem 32rem at 88% 8%, color-mix(in oklab, var(--color-secondary) 16%, transparent), transparent 70%),
+    radial-gradient(36rem 28rem at 6% 94%, color-mix(in oklab, var(--color-primary) 9%, transparent), transparent 70%),
+    radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px);
+  background-size: auto, auto, 28px 28px;
+}
+
+/* Transición entre secciones (scroll-driven animations, sin JS):
+   - .section-fade contrarresta el scroll con transform: el contenido queda quieto en pantalla.
+   - .fade-item se desvanece al salir antes de que aparezca la siguiente sección.
+   La opacidad va en los bloques (.fade-item), nunca en un ancestro de una tarjeta de vidrio: una opacidad
+   animada en un ancestro rompe su backdrop-filter. Por eso GlassCard lleva .fade-item y los wrappers no.
+   Dos animaciones sin fill (entrada y salida): en reposo ninguna está activa.
+   Navegadores sin soporte o con reduced motion: scroll normal, sin efecto. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* La línea de tiempo es la de la <section> (alto >= viewport), no la del contenido. */
+    .section-timeline {
+      view-timeline-name: --section;
+    }
+    .section-fade,
+    .fade-item {
+      animation-timeline: --section, --section;
+      animation-range:
+        entry 0% entry 99%,
+        exit 1% exit 100%;
+    }
+    .section-fade {
+      animation-name: section-enter-move, section-exit-move;
+      animation-timing-function: linear;
+      animation-timeline: --section, --section;
+    }
+    .fade-item {
+      animation-name: section-enter-fade, section-exit-fade;
+      animation-timing-function: linear;
+      animation-timeline: --section, --section;
+    }
+  }
+}
+
+@keyframes section-enter-move {
+  entry 0% {
+    transform: translateY(-100dvh) scale(0.98);
+  }
+  entry 100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes section-exit-move {
+  exit 0% {
+    transform: translateY(0) scale(1);
+  }
+  exit 100% {
+    transform: translateY(100dvh) scale(0.98);
+  }
+}
+
+@keyframes section-enter-fade {
+  entry 0%,
+  entry 55% {
+    opacity: 0;
+  }
+  entry 100% {
+    opacity: 1;
+  }
+}
+
+@keyframes section-exit-fade {
+  exit 0% {
+    opacity: 1;
+  }
+  exit 45%,
+  exit 100% {
+    opacity: 0;
+  }
 }
 
 /* Vidrio: si el navegador no soporta backdrop-filter, fondo casi opaco para mantener contraste. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .glass {
-    background-color: rgb(14 14 16 / 0.94);
+    background-color: color-mix(in oklab, var(--color-ink) 94%, transparent);
   }
 }

@@ -13,7 +13,7 @@ export function Education() {
               href={study.website.href}
               target="_blank"
               rel="noreferrer"
-              className="mt-1 inline-flex items-center gap-1 text-sm text-mint hover:text-white"
+              className="mt-1 inline-flex items-center gap-1 text-sm text-primary hover:text-white"
             >
               {study.website.label}
               <ArrowUpRightIcon />
@@ -34,12 +34,12 @@ export function Education() {
         </GlassCard>
       ))}
 
-      <article className="rounded-card border border-white/10 bg-ink/70 p-6 sm:p-8">
+      <article className="fade-item rounded-card border border-white/10 bg-ink/70 p-6 sm:p-8">
         <h3 className="text-lg font-bold text-white">{profile.openSource.title}</h3>
         <ul className="mt-5 flex flex-col gap-3 text-sm leading-relaxed">
           {profile.openSource.items.map((item) => (
             <li key={item} className="flex gap-3">
-              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-mint" aria-hidden="true" />
+              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true" />
               {item}
             </li>
           ))}
