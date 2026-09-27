@@ -49,11 +49,13 @@
   background-size: auto, auto, 28px 28px;
 }
 
-/* Transición entre secciones (scroll-driven animations, sin JS):
-   - .section-fade contrarresta el scroll con transform: el contenido queda quieto en pantalla.
-   - .fade-item se desvanece al salir antes de que aparezca la siguiente sección.
-   La opacidad va en los bloques (.fade-item), nunca en un ancestro de una tarjeta de vidrio: una opacidad
-   animada en un ancestro rompe su backdrop-filter. Por eso GlassCard lleva .fade-item y los wrappers no.
+/* Transición entre secciones (scroll-driven animations):
+   - .section-fade contrarresta el scroll con translate (el contenido queda quieto) y escala según la dirección.
+   - .fade-item se desvanece; la opacidad va en los bloques, nunca en un ancestro del vidrio
+     (una opacidad animada en un ancestro rompe su backdrop-filter).
+   Dirección (html[data-scroll-dir], la fija App al empezar cada gesto):
+   - down: la sección que sale se aleja hacia el fondo (escala < 1); la que entra llega desde los bordes (escala > 1).
+   - up: la que vuelve entra desde los bordes hacia el centro; la que sale se aleja hacia el fondo.
    Dos animaciones sin fill (entrada y salida): en reposo ninguna está activa.
    Navegadores sin soporte o con reduced motion: scroll normal, sin efecto. */
 @media (prefers-reduced-motion: no-preference) {
@@ -64,39 +66,75 @@
     }
     .section-fade,
     .fade-item {
+      animation-timing-function: linear;
       animation-timeline: --section, --section;
       animation-range:
         entry 0% entry 99%,
         exit 1% exit 100%;
     }
     .section-fade {
-      animation-name: section-enter-move, section-exit-move;
-      animation-timing-function: linear;
+      animation-name: section-enter-edges, section-exit-back;
       animation-timeline: --section, --section;
+    }
+    :root[data-scroll-dir='up'] .section-fade {
+      animation-name: section-enter-back, section-exit-edges;
     }
     .fade-item {
       animation-name: section-enter-fade, section-exit-fade;
-      animation-timing-function: linear;
       animation-timeline: --section, --section;
     }
   }
 }
 
-@keyframes section-enter-move {
+/* Llega desde los bordes: grande → tamaño real. */
+@keyframes section-enter-edges {
   entry 0% {
-    transform: translateY(-100dvh) scale(0.98);
+    transform: translateY(-100dvh) scale(1.15);
+  }
+  entry 55% {
+    transform: translateY(-45dvh) scale(1.15);
   }
   entry 100% {
     transform: translateY(0) scale(1);
   }
 }
 
-@keyframes section-exit-move {
+/* Vuelve desde el fondo: pequeño → tamaño real (se ve al subir, en reversa: se aleja al fondo). */
+@keyframes section-enter-back {
+  entry 0% {
+    transform: translateY(-100dvh) scale(0.85);
+  }
+  entry 55% {
+    transform: translateY(-45dvh) scale(0.85);
+  }
+  entry 100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Se aleja hacia el fondo: tamaño real → pequeño. */
+@keyframes section-exit-back {
   exit 0% {
     transform: translateY(0) scale(1);
   }
+  exit 45% {
+    transform: translateY(45dvh) scale(0.85);
+  }
   exit 100% {
-    transform: translateY(100dvh) scale(0.98);
+    transform: translateY(100dvh) scale(0.85);
+  }
+}
+
+/* Sale hacia los bordes (se ve al subir, en reversa: entra desde los bordes hacia el centro). */
+@keyframes section-exit-edges {
+  exit 0% {
+    transform: translateY(0) scale(1);
+  }
+  exit 45% {
+    transform: translateY(45dvh) scale(1.15);
+  }
+  exit 100% {
+    transform: translateY(100dvh) scale(1.15);
   }
 }
 
