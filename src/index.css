@@ -49,6 +49,27 @@
   background-size: auto, auto, 28px 28px;
 }
 
+/* Brillo que sigue al puntero (Backdrop). Grande y tenue para que se lea como luz ambiental, no como
+   foco: ~44rem de diámetro y como máximo 12 % de color: el texto más tenue (white/50) sigue en AA (4,6:1).
+   Centro primary → borde secondary, como el resto de la paleta. Oculto hasta el primer movimiento. */
+.pointer-glow {
+  position: absolute;
+  top: -22rem;
+  left: -22rem;
+  width: 44rem;
+  height: 44rem;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--color-primary) 12%, transparent),
+    color-mix(in oklab, var(--color-secondary) 10%, transparent) 55%,
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 600ms ease;
+  will-change: transform;
+}
+
 /* Transición entre secciones (scroll-driven animations):
    - .section-fade contrarresta el scroll con translate (el contenido queda quieto) y escala según la dirección.
    - .fade-item se desvanece; la opacidad va en los bloques, nunca en un ancestro del vidrio

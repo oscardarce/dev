@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { sections, type SectionId } from '../../data/profile'
+import logo from '../../assets/logo.svg'
+import { profile, sections, type SectionId } from '../../data/profile'
 import { Button } from '../ui/Button'
 import { CloseIcon, MenuIcon } from '../ui/Icons'
 import { Navigation } from './Navigation'
@@ -52,9 +53,17 @@ export function Header() {
   const closeMenu = () => setMenuOpen(false)
 
   return (
-    // Barra flotante sin marca: solo navegación y CTA. En móvil, solo el botón de menú.
+    // Barra flotante: logo a la izquierda, navegación y CTA al centro; en móvil, logo y botón de menú.
     <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-5 pt-4 sm:px-8">
-      <div className="mx-auto flex max-w-6xl justify-end lg:justify-center">
+      <div className="mx-auto flex max-w-6xl items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr]">
+        <a
+          href="#home"
+          onClick={closeMenu}
+          className="pointer-events-auto justify-self-start rounded-lg transition-opacity duration-200 hover:opacity-80 motion-reduce:transition-none"
+        >
+          <img src={logo} alt={`${profile.name}, home`} width={74} height={40} className="h-10 w-auto" />
+        </a>
+
         <div className="glass pointer-events-auto hidden items-center gap-2 rounded-full border border-white/10 bg-ink/60 p-1.5 shadow-glass backdrop-blur-md lg:flex">
           <nav aria-label="Primary">
             <Navigation active={active} orientation="horizontal" />
@@ -66,7 +75,7 @@ export function Header() {
 
         <button
           type="button"
-          className="glass pointer-events-auto grid size-12 place-items-center rounded-full border border-white/10 bg-ink/60 text-xl text-white shadow-glass backdrop-blur-md lg:hidden"
+          className="glass pointer-events-auto grid size-12 place-items-center justify-self-end rounded-full border border-white/10 bg-ink/60 text-xl text-white shadow-glass backdrop-blur-md lg:hidden"
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
