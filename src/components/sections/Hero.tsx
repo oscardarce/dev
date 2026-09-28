@@ -28,7 +28,7 @@ export function Hero() {
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg text-white/70 sm:text-xl">{profile.headline}</p>
-          {/* TODO: texto (tagline del hero; el CV no incluye uno) */}
+          <p className="mt-4 text-base text-white/60 italic sm:text-lg">&ldquo;{profile.motto}&rdquo;</p>
 
           <div className="mt-10 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
             <Button href="#contact" className="w-full sm:w-auto">
