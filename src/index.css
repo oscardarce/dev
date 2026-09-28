@@ -23,6 +23,8 @@
 
   --shadow-glass:
     0 24px 48px -24px rgb(0 0 0 / 0.8), inset 0 1px 0 0 rgb(255 255 255 / 0.06);
+  /* Halo de hover en elementos interactivos pequeños (iconos sociales). */
+  --shadow-glow: 0 0 24px -4px color-mix(in oklab, var(--color-primary) 55%, transparent);
 }
 
 @layer base {
@@ -90,13 +92,16 @@
       animation-timing-function: linear;
       animation-timeline: --section, --section;
     }
-    /* El movimiento cubre el rango completo: si terminara antes, el último tramo del scroll movería
-       el contenido ya asentado y se vería un rebote al entrar cada sección. */
+    /* El movimiento llega hasta el reposo (entry 100 % / exit 0 %): si terminara antes, el último tramo
+       del scroll movería el contenido ya asentado y se vería un rebote al entrar cada sección.
+       En el otro extremo deja 1 % libre: en reposo, la sección siguiente (entry 0 %) y la anterior
+       (exit 100 %) no deben estar activas, o su contenido invisible quedaría encima de la actual
+       y bloquearía los clics. En ese 1 % el contenido aún es invisible. */
     .section-fade {
       animation-name: section-enter-edges, section-exit-back;
       animation-range:
-        entry 0% entry 100%,
-        exit 0% exit 100%;
+        entry 1% entry 100%,
+        exit 0% exit 99%;
     }
     :root[data-scroll-dir='up'] .section-fade {
       animation-name: section-enter-back, section-exit-edges;

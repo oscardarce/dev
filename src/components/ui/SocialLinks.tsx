@@ -44,14 +44,15 @@ export function SocialLinks({ variant = 'icons', className = '' }: SocialLinksPr
     <ul className={`flex items-center gap-3 ${className}`}>
       {profile.socials.map(({ id, label, href }) => {
         const Icon = icons[id]
-        const external = !href.startsWith('mailto:')
+        // En la variante de iconos el email lleva al formulario de la página; las redes abren su perfil.
+        const isEmail = id === 'email'
         return (
           <li key={id}>
             <a
-              href={href}
-              aria-label={label}
-              {...(external && { target: '_blank', rel: 'noreferrer' })}
-              className="grid size-11 place-items-center rounded-full border border-white/10 bg-white/5 text-lg text-white/70 transition-colors duration-200 hover:border-white/25 hover:text-primary motion-reduce:transition-none"
+              href={isEmail ? '#contact' : href}
+              aria-label={isEmail ? 'Go to contact form' : `${label} (opens in a new tab)`}
+              {...(!isEmail && { target: '_blank', rel: 'noreferrer' })}
+              className="grid size-11 place-items-center rounded-full border border-white/10 bg-white/5 text-lg text-white/70 transition duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-linear-to-br hover:from-primary/20 hover:to-secondary/25 hover:text-primary hover:shadow-glow focus-visible:border-primary/50 focus-visible:text-primary active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
             >
               <Icon />
             </a>
