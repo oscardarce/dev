@@ -33,6 +33,7 @@ type Study = {
 export const profile = {
   name: 'Oscar Darce',
   headline: 'Software Developer | Full-Stack Development | Cloud, Automation & AI',
+  motto: 'Build. Break. Figure it out. Make it better.',
   location: 'San José, Costa Rica',
 
   summary: [
