@@ -80,8 +80,9 @@
    - down: la sección que sale se aleja hacia el fondo (escala < 1); la que entra llega desde los bordes (escala > 1).
    - up: la que vuelve entra desde los bordes hacia el centro; la que sale se aleja hacia el fondo.
    Dos animaciones sin fill por elemento (entrada y salida), acotadas a su tramo de scroll.
-   Navegadores sin soporte o con reduced motion: scroll normal, sin efecto. */
-@media (prefers-reduced-motion: no-preference) {
+   Solo desktop (lg): en móvil las secciones miden más que la pantalla y el contenido quieto durante
+   una pantalla de scroll se siente pegado. Móvil, navegadores sin soporte o reduced motion: scroll nativo. */
+@media (prefers-reduced-motion: no-preference) and (min-width: 64rem) {
   @supports (animation-timeline: view()) {
     /* La línea de tiempo es la de la <section> (alto >= viewport), no la del contenido. */
     .section-timeline {

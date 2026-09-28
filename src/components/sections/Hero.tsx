@@ -11,7 +11,7 @@ export function Hero() {
     <section
       id="home"
       aria-labelledby="home-title"
-      className="section-timeline flex min-h-dvh overflow-x-clip snap-start flex-col justify-center px-5 pt-24 pb-16 sm:px-8"
+      className="section-timeline flex min-h-svh lg:min-h-dvh overflow-x-clip snap-start flex-col justify-center px-5 pt-24 pb-16 sm:px-8"
     >
       <div className="section-fade">
         <div className="fade-item flex flex-col items-center text-center">

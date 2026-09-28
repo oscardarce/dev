@@ -16,7 +16,7 @@ export function Section({ id, eyebrow, title, children }: SectionProps) {
     <section
       id={id}
       aria-labelledby={headingId}
-      className="section-timeline flex min-h-dvh overflow-x-clip snap-start flex-col justify-center px-5 pt-24 pb-16 sm:px-8"
+      className="section-timeline flex min-h-svh lg:min-h-dvh overflow-x-clip snap-start flex-col justify-center px-5 pt-24 pb-16 sm:px-8"
     >
       <div className="section-fade mx-auto w-full max-w-6xl">
         <div className="fade-item">
