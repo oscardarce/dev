@@ -2,19 +2,19 @@
 
 export type SocialId = 'email' | 'linkedin' | 'github'
 
-export type Social = {
+type Social = {
   id: SocialId
   label: string
   display: string
   href: string
 }
 
-export type SkillGroup = {
+type SkillGroup = {
   category: string
   items: string[]
 }
 
-export type Job = {
+type Job = {
   company: string
   role: string
   location: string
@@ -24,7 +24,7 @@ export type Job = {
   stack: string[]
 }
 
-export type Study = {
+type Study = {
   institution: string
   website?: { label: string; href: string }
   programs: { name: string; status?: string }[]
