@@ -8,7 +8,7 @@ type SectionProps = {
   children: ReactNode
 }
 
-// Sección a pantalla completa con snap. La transición entre secciones es CSS (.section-fade y .fade-item en index.css).
+// Sección a pantalla completa (snap en desktop). La transición es CSS: .section-fade y .fade-item en styles/transitions.css.
 export function Section({ id, eyebrow, title, children }: SectionProps) {
   const headingId = `${id}-title`
 

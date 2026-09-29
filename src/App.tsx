@@ -8,7 +8,7 @@ import { Experience } from './components/sections/Experience'
 import { Hero } from './components/sections/Hero'
 import { Skills } from './components/sections/Skills'
 import { Section } from './components/ui/Section'
-import { useSectionScroll } from './lib/sectionScroll'
+import { useSectionScroll } from './hooks/useSectionScroll'
 
 function App() {
   useSectionScroll()

@@ -1,0 +1,129 @@
+/* Transición entre secciones (scroll-driven animations):
+   - .section-fade contrarresta el scroll con translate (el contenido queda quieto) y escala según la dirección.
+   - .fade-item se desvanece; la opacidad va en los bloques, nunca en un ancestro del vidrio
+     (una opacidad animada en un ancestro rompe su backdrop-filter).
+   Dirección (html[data-scroll-dir], la fija App al empezar cada gesto):
+   - down: la sección que sale se aleja hacia el fondo (escala < 1); la que entra llega desde los bordes (escala > 1).
+   - up: la que vuelve entra desde los bordes hacia el centro; la que sale se aleja hacia el fondo.
+   Dos animaciones sin fill por elemento (entrada y salida), acotadas a su tramo de scroll.
+   Solo desktop (lg): en móvil las secciones miden más que la pantalla y el contenido quieto durante
+   una pantalla de scroll se siente pegado. Móvil, navegadores sin soporte o reduced motion: scroll nativo. */
+@media (prefers-reduced-motion: no-preference) and (min-width: 64rem) {
+  @supports (animation-timeline: view()) {
+    /* La línea de tiempo es la de la <section> (alto >= viewport), no la del contenido. */
+    .section-timeline {
+      view-timeline-name: --section;
+    }
+    .section-fade,
+    .fade-item {
+      animation-timing-function: linear;
+      animation-timeline: --section, --section;
+    }
+    /* El movimiento llega hasta el reposo (entry 100 % / exit 0 %): si terminara antes, el último tramo
+       del scroll movería el contenido ya asentado y se vería un rebote al entrar cada sección.
+       En el otro extremo deja 1 % libre: en reposo, la sección siguiente (entry 0 %) y la anterior
+       (exit 100 %) no deben estar activas, o su contenido invisible quedaría encima de la actual
+       y bloquearía los clics. En ese 1 % el contenido aún es invisible. */
+    .section-fade {
+      animation-name: section-enter-edges, section-exit-back;
+      animation-range:
+        entry 1% entry 100%,
+        exit 0% exit 99%;
+    }
+    :root[data-scroll-dir='up'] .section-fade {
+      animation-name: section-enter-back, section-exit-edges;
+    }
+    /* La opacidad deja 1 % libre en cada borde para no estar activa en reposo: una opacidad animada
+       rompe el backdrop-filter del vidrio. En ese 1 % la opacidad ya es ~1, no se nota. */
+    .fade-item {
+      animation-name: section-enter-fade, section-exit-fade;
+      animation-range:
+        entry 0% entry 99%,
+        exit 1% exit 100%;
+    }
+    /* La última sección no tiene salida: al bajar al footer el contenido de Contact no debe moverse. */
+    main > section:last-of-type .section-fade {
+      animation-name: section-enter-edges, none;
+    }
+    :root[data-scroll-dir='up'] main > section:last-of-type .section-fade {
+      animation-name: section-enter-back, none;
+    }
+    main > section:last-of-type .fade-item {
+      animation-name: section-enter-fade, none;
+    }
+  }
+}
+
+/* Llega desde los bordes: grande → tamaño real. */
+@keyframes section-enter-edges {
+  entry 0% {
+    transform: translateY(-100dvh) scale(1.15);
+  }
+  entry 55% {
+    transform: translateY(-45dvh) scale(1.15);
+  }
+  entry 100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Vuelve desde el fondo: pequeño → tamaño real (se ve al subir, en reversa: se aleja al fondo). */
+@keyframes section-enter-back {
+  entry 0% {
+    transform: translateY(-100dvh) scale(0.85);
+  }
+  entry 55% {
+    transform: translateY(-45dvh) scale(0.85);
+  }
+  entry 100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Se aleja hacia el fondo: tamaño real → pequeño. */
+@keyframes section-exit-back {
+  exit 0% {
+    transform: translateY(0) scale(1);
+  }
+  exit 45% {
+    transform: translateY(45dvh) scale(0.85);
+  }
+  exit 100% {
+    transform: translateY(100dvh) scale(0.85);
+  }
+}
+
+/* Sale hacia los bordes (se ve al subir, en reversa: entra desde los bordes hacia el centro). */
+@keyframes section-exit-edges {
+  exit 0% {
+    transform: translateY(0) scale(1);
+  }
+  exit 45% {
+    transform: translateY(45dvh) scale(1.15);
+  }
+  exit 100% {
+    transform: translateY(100dvh) scale(1.15);
+  }
+}
+
+/* Solo opacidad (animable en el compositor). No añadir visibility: saca la animación del compositor y,
+   al terminar un salto, el transform compuesto puede quedar desincronizado y mostrar un "fantasma". */
+@keyframes section-enter-fade {
+  entry 0%,
+  entry 55% {
+    opacity: 0;
+  }
+  entry 100% {
+    opacity: 1;
+  }
+}
+
+@keyframes section-exit-fade {
+  exit 0% {
+    opacity: 1;
+  }
+  exit 45%,
+  exit 100% {
+    opacity: 0;
+  }
+}

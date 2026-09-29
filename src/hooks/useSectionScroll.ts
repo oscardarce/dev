@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { sections } from '../data/profile'
 
-// Marca en <html> la dirección de cada gesto de scroll (la usa la transición entre secciones en index.css).
+// Marca en <html> la dirección de cada gesto de scroll (la usa styles/transitions.css).
 // Se fija al inicio del gesto y no cambia hasta que el scroll se detiene: el retorno del snap no la invierte.
 function useScrollDirection() {
   useEffect(() => {

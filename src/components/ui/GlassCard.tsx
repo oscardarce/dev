@@ -7,7 +7,7 @@ type GlassCardProps = {
 }
 
 // Superficie de vidrio. No anidar: el blur es costoso y dos capas no aportan nada visible.
-// Lleva .fade-item: se desvanece ella misma en la transición entre secciones (ver index.css).
+// Lleva .fade-item: se desvanece ella misma en la transición entre secciones (ver styles/transitions.css).
 export function GlassCard({ as: Tag = 'div', children, className = '' }: GlassCardProps) {
   return (
     <Tag
