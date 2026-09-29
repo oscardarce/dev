@@ -11,7 +11,7 @@ type GlassCardProps = {
 export function GlassCard({ as: Tag = 'div', children, className = '' }: GlassCardProps) {
   return (
     <Tag
-      className={`glass fade-item rounded-card border border-white/10 bg-white/[0.04] shadow-glass backdrop-blur-md ${className}`}
+      className={`glass fade-item rounded-card border border-white/10 bg-white/[0.04] shadow-glass backdrop-blur-sm ${className}`}
     >
       {children}
     </Tag>

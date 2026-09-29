@@ -60,7 +60,7 @@ export function MobileDrawer({ open, active, onClose, returnFocusRef }: MobileDr
       <div
         aria-hidden="true"
         onClick={onClose}
-        className={`absolute inset-0 bg-ink/60 backdrop-blur-sm transition-opacity duration-300 motion-reduce:transition-none ${
+        className={`glass-overlay absolute inset-0 bg-ink/60 backdrop-blur-sm transition-opacity duration-300 motion-reduce:transition-none ${
           open ? 'opacity-100' : 'opacity-0'
         }`}
       />

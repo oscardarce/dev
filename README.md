@@ -16,12 +16,12 @@ Landing page personal de Oscar Darce. Es una sola página con las secciones Hero
 ## Estructura
 
 ```
-index.html              <head>: title, meta, Open Graph, JSON-LD, favicons y fuentes
+index.html              <head>: title, meta, Open Graph, JSON-LD, favicons y precarga de la fuente
 vercel.json             Cabeceras de seguridad (CSP, HSTS…) y caché de /assets
-public/                 Favicons, manifest, og-image, robots.txt, sitemap.xml
+public/                 Favicons, manifest, og-image, robots.txt, sitemap.xml y fonts/ (woff2 locales)
 scripts/prerender.mjs   Último paso del build: escribe el HTML de la página en dist/index.html
 src/
-  main.tsx              Arranque: hidrata el HTML prerenderizado (o renderiza en dev)
+  main.tsx              Arranque: activa el modo ligero si aplica e hidrata el HTML prerenderizado
   entry-server.tsx      Render a string para el prerender
   App.tsx               Composición de la página
   data/profile.ts       TODO el contenido (textos del CV, enlaces, orden de secciones)
@@ -48,6 +48,12 @@ _referencias/           CV, capturas de Stitch y originales del logo (en .gitign
 - **Desktop (≥ 1024 px):** scroll snap `mandatory`. Un gesto de rueda lleva a la sección siguiente o anterior (`useSectionScroll`). La transición entre secciones (`styles/transitions.css`) usa *scroll-driven animations* de CSS: el contenido queda quieto y se desvanece. Al bajar, la sección que sale se aleja hacia el fondo; al subir, la que vuelve entra desde los bordes.
 - **Móvil y tablet:** scroll nativo, sin snap ni transición (las secciones miden más que la pantalla), y menú lateral (`MobileDrawer`).
 - **Sin la transición:** navegadores sin `animation-timeline` y equipos con *reduced motion* activado (en Windows, "Efectos de animación" desactivado) muestran el scroll normal. El contenido es el mismo.
+
+## Rendimiento
+
+- **Fuentes locales:** Plus Jakarta Sans y Space Grotesk se sirven desde `public/fonts` (woff2 variables, subset latin, licencia OFL) y se declaran con `@font-face` en `index.css`. No hay peticiones a Google.
+- **Modo ligero:** en equipos con ≤ 4 núcleos, ≤ 4 GB de RAM o con ahorro de datos, `main.tsx` marca `<html data-lite>`. En ese modo el vidrio pierde el blur (mismo tono, fondo opaco) y el brillo del puntero no se activa. Lo mismo ocurre si el sistema pide menos transparencia. Las transiciones se mantienen: solo animan `transform` y `opacity`, que la GPU compone sin repintar.
+- **Blur:** las tarjetas usan `backdrop-blur-sm`; es lo más caro de pintar, así que evita anidar superficies de vidrio.
 
 ## SEO
 

@@ -17,7 +17,7 @@ export function Header() {
     <>
       {/* Desktop: logo y pastilla de navegación flotantes, sin fondo. Móvil y tablet: barra glass de ancho
           completo para que el logo y el botón de menú no queden encima del texto. */}
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-ink/70 px-5 py-3 backdrop-blur-md sm:px-8 lg:pointer-events-none lg:border-0 lg:bg-transparent lg:pt-4 lg:pb-0 lg:backdrop-blur-none">
+      <header className="glass-bar fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-ink/70 px-5 py-3 backdrop-blur-md sm:px-8 lg:pointer-events-none lg:border-0 lg:bg-transparent lg:pt-4 lg:pb-0 lg:backdrop-blur-none">
         <div className="mx-auto flex max-w-6xl items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr]">
           <a
             href="#home"

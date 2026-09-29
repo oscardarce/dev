@@ -3,6 +3,13 @@ import { createRoot, hydrateRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 
+// Modo ligero para equipos modestos (≤ 4 núcleos, ≤ 4 GB de RAM o ahorro de datos): vidrio sin blur y sin
+// brillo del puntero. Las transiciones se mantienen: solo animan transform y opacity. Ver index.css.
+const device = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } }
+if (navigator.hardwareConcurrency <= 4 || (device.deviceMemory ?? 8) <= 4 || device.connection?.saveData) {
+  document.documentElement.dataset.lite = ''
+}
+
 const root = document.getElementById('root')!
 const app = (
   <StrictMode>

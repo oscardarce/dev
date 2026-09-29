@@ -1,6 +1,30 @@
 @import 'tailwindcss';
 @import './styles/transitions.css';
 
+/* Fuentes servidas desde el propio dominio (sin petición a Google, que bloqueaba el primer pintado).
+   Archivos variables, subset latin (incluye tildes y ñ). Licencia SIL Open Font License. */
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('/fonts/plus-jakarta-sans-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/plus-jakarta-sans-italic-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url('/fonts/space-grotesk-latin.woff2') format('woff2');
+}
+
 /* Tokens: paleta "Luminous Void" (primary cyan, secondary índigo, tertiary violeta, neutral),
    lenguaje visual de Stitch. Tertiary solo en trazos decorativos; danger del icono de borrar. */
 @theme {
@@ -73,9 +97,33 @@
   will-change: transform;
 }
 
-/* Vidrio: si el navegador no soporta backdrop-filter, fondo casi opaco para mantener contraste. */
+/* Vidrio sin blur: mismo tono, fondo opaco. Se usa cuando el blur no está disponible o conviene evitarlo:
+   - navegadores sin backdrop-filter;
+   - modo ligero (html[data-lite], lo marca main.tsx en equipos modestos: el blur es lo más caro de pintar);
+   - usuarios que piden menos transparencia en su sistema. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .glass {
-    background-color: color-mix(in oklab, var(--color-ink) 94%, transparent);
+    background-color: color-mix(in oklab, white 5%, var(--color-ink));
   }
+}
+:root[data-lite] .glass {
+  backdrop-filter: none;
+  background-color: color-mix(in oklab, white 5%, var(--color-ink));
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    backdrop-filter: none;
+    background-color: color-mix(in oklab, white 5%, var(--color-ink));
+  }
+}
+/* Barra del header en móvil y overlay del drawer: en modo ligero pierden el blur; la barra se vuelve casi
+   opaca para que el texto que pasa por debajo no se lea a través. En desktop la barra es transparente. */
+@media (max-width: 63.999rem) {
+  :root[data-lite] .glass-bar {
+    backdrop-filter: none;
+    background-color: color-mix(in oklab, var(--color-ink) 95%, transparent);
+  }
+}
+:root[data-lite] .glass-overlay {
+  backdrop-filter: none;
 }
