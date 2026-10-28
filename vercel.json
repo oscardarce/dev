@@ -2,9 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/:path(.*)",
       "has": [{ "type": "host", "value": "www.oscardarce.com" }],
-      "destination": "https://oscardarce.com/:path*",
+      "destination": "https://oscardarce.com/:path",
       "permanent": true
     }
   ],
